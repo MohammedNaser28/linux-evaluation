@@ -10,9 +10,11 @@ function medal(rank: number): string {
 export default function LeaderboardView({
   leaderboard,
   error,
+  mode,
 }: {
   leaderboard: Leaderboard | null
   error: string | null
+  mode: 'test' | 'eval'
 }) {
   if (error) {
     return (
@@ -49,7 +51,7 @@ export default function LeaderboardView({
     <main>
       <header className="site">
         <h1>Linux evaluation '26</h1>
-        <span className="badge">live</span>
+        {mode === 'test' ? <span className="badge">practice</span> : <span className="badge">live</span>}
       </header>
 
       <div className="stats">
@@ -105,7 +107,9 @@ export default function LeaderboardView({
         </table>
       </section>
 
-      <footer className="footer">Linux evaluation '26 · data refreshes automatically</footer>
+      <footer className="footer">
+        Linux evaluation '26{mode === 'test' ? ' · practice data (test_submissions)' : ' · live data'} · refreshes automatically
+      </footer>
     </main>
   )
 }

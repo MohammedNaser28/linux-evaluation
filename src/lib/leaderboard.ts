@@ -121,6 +121,24 @@ export async function loadLeaderboard(sb: SupabaseClient): Promise<Leaderboard> 
 }
 
 /**
+ * Loads the PUBLIC leaderboard. Before the final day, the instructor sets
+ * LEADERBOARD_SOURCE=test so the page shows the practice (test_submissions)
+ * data instead of the real submissions table; the real table stays empty until
+ * the event. Defaults to the real submissions table.
+ */
+export async function loadPublicLeaderboard(sb: SupabaseClient): Promise<Leaderboard> {
+  if (process.env.LEADERBOARD_SOURCE === 'test') {
+    const rows = await fetchTestSubmissions(sb)
+    return aggregateSubmissions(rows, totalLevelsFromEnv())
+  }
+  return loadLeaderboard(sb)
+}
+
+export function publicMode(): 'test' | 'eval' {
+  return process.env.LEADERBOARD_SOURCE === 'test' ? 'test' : 'eval'
+}
+
+/**
  * Fetches the dry-run test submissions (test_submissions table). Test levels are
  * keyed test1..test10, so they never mix with the real leaderboard.
  */
