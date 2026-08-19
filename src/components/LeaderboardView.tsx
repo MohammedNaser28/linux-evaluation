@@ -1,3 +1,5 @@
+'use client'
+
 import type { Leaderboard } from '@/lib/types'
 
 function medal(rank: number): string {
